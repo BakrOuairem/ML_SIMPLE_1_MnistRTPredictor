@@ -1,2 +1,9 @@
-# TESTED WITH Python 3.13.2
+# TESTED WITH Python 3.12.9
 
+# To work with notebooks
+ipykernel
+
+# Data/ML Management
+tensorflow # The main lib for ML projects and AI
+tensorflow-datasets # To load mnist
+jax # Jax is a python library that combines most tools needed in ML projects 

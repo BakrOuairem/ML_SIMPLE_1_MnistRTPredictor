@@ -19,11 +19,16 @@ usage() {
     echo "                    Required for -c, -d, and -R commands."
     echo "  -r <file>         Specify a requirements.txt file for package installation (used with -c)."
     echo "                    Optional for -c command."
+    echo "  -p <binary>         Specify the Python binary to use for creating the environment."
+    echo "                    Defaults to 'python3' if not specified."
     echo "  -h, --help        Display this help message."
     echo ""
     echo "Examples:"
-    echo "  # Create a new environment named 'my_project_env' and install packages from requirements.txt"
-    echo "  $0 -c -n my_project_env -r requirements.txt"
+    echo "  # Create a new environment named 'my_project_env' using the default 'python3'"
+    echo "  $0 -c -n my_project_env"
+    echo ""
+    echo "  # Create a new environment using a specific Python version, and install requirements"
+    echo "  $0 -c -n my_project_env -p python3.10 -r requirements.txt"
     echo ""
     echo "  # Delete an existing environment named 'my_project_env'"
     echo "  $0 -d -n my_project_env"
@@ -39,6 +44,7 @@ usage() {
 # Initialize variables to store command and options.
 VENV_NAME=""
 REQUIREMENTS_FILE=""
+PYTHON_BIN="" # New variable to store the specified Python binary
 COMMAND=""
 
 # Parse command-line arguments using a while loop.
@@ -81,6 +87,16 @@ while (( "$#" )); do
                 usage
             fi
             ;;
+        -p) # New case for the Python binary option
+            # Check if the next argument exists and is not another option (starts with -)
+            if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
+                PYTHON_BIN="$2"
+                shift 2 # Consume both -p and its value
+            else
+                echo "Error: -p requires a non-empty argument (Python binary path)." >&2
+                usage
+            fi
+            ;;
         -h|--help)
             usage # Display help and exit
             ;;
@@ -99,19 +115,24 @@ create_env() {
         usage
     fi
 
+    # If the user did not specify a Python binary, default to python3.
+    if [ -z "$PYTHON_BIN" ]; then
+        PYTHON_BIN="python3"
+    fi
+
     # Check if the virtual environment directory already exists.
     if [ -d "$VENV_NAME" ]; then
         echo "Environment '$VENV_NAME' already exists. Skipping creation."
         return 0 # Exit successfully as the environment already exists.
     fi
 
-    echo "Creating virtual environment '$VENV_NAME'..."
-    # Use python3 -m venv to create the environment.
-    python3 -m venv "$VENV_NAME"
+    echo "Creating virtual environment '$VENV_NAME' using '$PYTHON_BIN'..."
+    # Use the specified or default Python binary to create the environment.
+    "$PYTHON_BIN" -m venv "$VENV_NAME"
 
     # Check the exit status of the previous command.
     if [ $? -ne 0 ]; then
-        echo "Error: Failed to create virtual environment '$VENV_NAME'." >&2
+        echo "Error: Failed to create virtual environment '$VENV_NAME' using '$PYTHON_BIN'." >&2
         exit 1
     fi
 
