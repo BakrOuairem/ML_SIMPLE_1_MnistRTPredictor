@@ -1,6 +1,7 @@
 # IMPORTS
 
 import tensorflow_datasets as tfds
+import tensorflow as tf
 
 # CONSTANTS (Maybe better as a JSON ?)
 
@@ -14,5 +15,7 @@ PREFETCH_MNIST_KWARGS_TFDSLOADER = {
     "as_supervised" : True,  # No point in putting to false (false will just transform the tuple to a dict with image and label keys)
     "with_info" : True, # No point in putting to false either.
 }
+
+EXPECTED_IMAGE_SIZE = [28,28]
 
 help(tfds.load)

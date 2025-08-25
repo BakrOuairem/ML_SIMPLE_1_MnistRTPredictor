@@ -3,7 +3,7 @@ This file loads MNIST dataset from the tensorflow datasets prefetchds loader. Th
 ## I like working in OOP design because I know at each step what are the I/Os , and use them for anything later. 
 """
 
-from config.dp_utils import tfds, PREFETCH_MNIST_KWARGS_TFDSLOADER
+from config.utils import tfds, PREFETCH_MNIST_KWARGS_TFDSLOADER
 
 class TFDSPrefetchMnist: 
     """
@@ -29,8 +29,7 @@ class TFDSPrefetchMnist:
         """
         Building the dataset, from the config file
         """
-        (self.__training_dataset,self.__validation_dataset,self.__testing_dataset),self.__dataset_info =  tfds.load(**PREFETCH_MNIST_KWARGS_TFDSLOADER) 
-
+        (self.__training_dataset,self.__validation_dataset,self.__testing_dataset), self.__dataset_info =  tfds.load(**PREFETCH_MNIST_KWARGS_TFDSLOADER) 
     
     """
     Getters
@@ -44,3 +43,6 @@ class TFDSPrefetchMnist:
     
     def get_testing_dataset(self) : 
         return self.__testing_dataset
+
+    def get_dataset_info(self) : 
+        return self.__dataset_info
