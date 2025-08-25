@@ -7,3 +7,7 @@ ipykernel
 tensorflow # The main lib for ML projects and AI
 tensorflow-datasets # To load mnist
 jax # Jax is a python library that combines most tools needed in ML projects 
+
+
+# Some Visualisation tools (2D)
+matplotlib
